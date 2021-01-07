@@ -2,6 +2,9 @@
 
 namespace SignalPaint.Hubs
 {
+  /// <summary>
+  /// Hub interface definition
+  /// </summary>
   public interface IChatClient
   {
     /// <summary>
@@ -20,7 +23,7 @@ namespace SignalPaint.Hubs
     Task SignalTouchStart(string connectionId, float x, float y, float lineWidth, string color);
 
     /// <summary>
-    /// Contiue drawing
+    /// Continue drawing
     /// </summary>
     /// <param name="connectionId">ID of the connection</param>
     /// <param name="x">Screen coordinate x</param>

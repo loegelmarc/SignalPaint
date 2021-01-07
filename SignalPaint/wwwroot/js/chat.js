@@ -354,7 +354,7 @@ color_picker_wrapper.style.backgroundColor = color_picker.value;
 //  }
 //}
 
-
+//Add event listeners
 for (const ev of ["touchstart", "mousedown"]) {
   canvas.addEventListener(ev, OnTouchStart);
 }
