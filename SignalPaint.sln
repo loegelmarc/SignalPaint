@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30330.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalPaint", "SignalPaint\SignalPaint.csproj", "{43FCE639-A51F-4011-A0DA-738075EF761F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43FCE639-A51F-4011-A0DA-738075EF761F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43FCE639-A51F-4011-A0DA-738075EF761F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43FCE639-A51F-4011-A0DA-738075EF761F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43FCE639-A51F-4011-A0DA-738075EF761F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {591C4949-687A-4838-9CEF-757A7C52E2F9}
+	EndGlobalSection
+EndGlobal

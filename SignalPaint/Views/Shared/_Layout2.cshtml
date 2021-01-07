@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <title>SignalPaint</title>
+  @*<title>@ViewData["Title"] - SignalPaint</title>*@
+
+  <style>
+    body {
+      position: absolute;
+      margin: 0;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      font-family: sans-serif;
+      font-size: 13px;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+
+    #touches, #force {
+      opacity: 0;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #ccc;
+    }
+
+    canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    #info {
+      z-index: 1;
+      position: absolute;
+      bottom: 1em;
+    }
+
+    .selectColor {
+      width: 4em;
+      height: 4em;
+      border: 1em solid;
+      cursor: pointer;
+      margin: 0;
+      border-color: white;
+      border-radius: 4em;
+    }
+
+      .selectColor.active {
+        border-color: gray;
+      }
+
+    input[type="color"] {
+      opacity: 0;
+      display: block;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 16px;
+    }
+
+    #color-picker-wrapper {
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  @*<header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SignalPaint</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>*@
+  @*<div class="container">
+    <main role="main" class="pb-3">*@
+  @RenderBody()
+  @*</main>
+    </div>*@
+
+  @*<footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - SignalPaint - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@
+  @RenderSection("Scripts", required: false)
+</body>
+</html>

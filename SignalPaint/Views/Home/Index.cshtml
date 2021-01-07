@@ -1,0 +1,58 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+@*<div class="text-center">
+      <h1 class="display-4">Welcome</h1>
+      <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  </div>*@
+
+@*<h1>Demo of Apple Pencil / 3D touch API</h1>*@
+<div id="force"></div>
+<div id="touches"></div>
+<canvas>Sorry, your browser is too old for this demo.</canvas>
+<div id="info">
+  @*<input type="color"/>*@
+  <div id="color-picker-wrapper">
+    <input type="color" value="#000000" id="color-picker">
+  </div>
+  <a id="clearScreen">Clear</a>
+  @*<div class="selectColor active" style="background-color: black"></div>
+  <div class="selectColor" style="background-color: red"></div>
+  <div class="selectColor" style="background-color: orange"></div>
+  <div class="selectColor" style="background-color: yellow"></div>*@
+</div>
+@*<div id="info">
+    <a href="https://github.com/quietshu/apple-pencil-safari-api-test" target="_blank">GitHub</a>
+  </div>*@
+
+@*<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+      <div class="col-2">User</div>
+      <div class="col-4"><input type="text" id="userInput" /></div>
+    </div>
+    <div class="row">
+      <div class="col-2">Message</div>
+      <div class="col-4"><input type="text" id="messageInput" /></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+      <div class="col-6">
+        <input type="button" id="sendButton" value="Send Message" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <ul id="messagesList"></ul>
+    </div>
+  </div>*@
+
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
