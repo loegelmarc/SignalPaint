@@ -50,6 +50,13 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").withAuto
 function CreateClient() {
   return { 'points': [], 'strokeStyle': "" };
 }
+
+function GetPointBetween(p1, p2) {
+  const x = (p1.x + p2.x) / 2;
+  const y = (p1.y + p2.y) / 2;
+  return { x, y };
+}
+
 function OnSignalDisconnected(id) {
   console.log(id & " disconnected");
   clients[id] = null;
@@ -62,42 +69,14 @@ function OnSignalClearScreen(id) {
 }
 connection.on("SignalClearScreen", OnSignalClearScreen);
 
-
-//function OnSignalSetColor(id, newColor) {
-
-//  if (!clients[id]) {
-//    clients[id] = CreateClient();
-//  }
-
-//  clients[id].strokeStyle = newColor;
-//  //alert(newColor);
-//  if (color_picker.value !== newColor) {
-//    color_picker.value = newColor;
-//    color_picker_wrapper.style.backgroundColor = newColor;
-//  }
-//  //color_picker_wrapper.style.backgroundColor = color_picker.value;
-//}
-//connection.on("SignalSetColor", OnSignalSetColor);
-
-
 function OnSignalTouchStart(id, x, y, lineWidth, color) {
-  //isMousedown = true;
-  console.log(id);
+  //console.log(id);
   if (!clients[id]) {
     clients[id] = CreateClient();
   }
   clients[id].strokeStyle = color;
-  //lineWidth = Math.log(pressure + 1) * 40;
-  //context.lineWidth = lineWidth; // pressure * 50;
-  //context.strokeStyle = clients[id].strokeStyle;
-  //context.lineCap = "round";
-  //context.lineJoin = "round";
-  //context.beginPath();
-  //context.moveTo(x, y);
-
   const point = { x, y, lineWidth };
   clients[id].points.push(point);
-  //points.push(point);
 }
 connection.on("SignalTouchStart", OnSignalTouchStart);
 
@@ -109,37 +88,33 @@ function OnSignalTouchMove(id, x, y, lineWidth) {
   const points = client.points;
   const point = { x, y, lineWidth };
   points.push(point);
-  //points.push(point);
 
-  //context.strokeStyle = client.strokeStyle;
-  //context.lineCap = "round";
-  //context.lineJoin = "round";
-  // context.lineWidth   = lineWidth// pressure * 50;
-  // context.lineTo(x, y);
-  // context.moveTo(x, y);
 
   if (points.length >= 3) {
     const l = points.length - 1;
     context.beginPath();
+
     context.strokeStyle = client.strokeStyle;
+    context.lineWidth = points[l - 1].lineWidth;
     context.lineCap = "round";
     context.lineJoin = "round";
-    //let xStart = 0;
-    //let yStart = 0;
+
     if (points.length === 3) {
       const p0 = points[0];
-      //context.moveTo(x, y);
       context.moveTo(p0.x, p0.y);
     } else {
-      const xcStart = (points[l - 1].x + points[l - 2].x) / 2;
-      const ycStart = (points[l - 1].y + points[l - 2].y) / 2;
-      context.moveTo(xcStart, ycStart);
+      const cStart = GetPointBetween(points[l - 1], points[l - 2]);
+      //const xcStart = (points[l - 1].x + points[l - 2].x) / 2;
+      //const ycStart = (points[l - 1].y + points[l - 2].y) / 2;
+      //context.moveTo(xcStart, ycStart);
+      context.moveTo(cStart.x, cStart.y);
     }
+
     //const l = points.length - 1;
-    const xc = (points[l].x + points[l - 1].x) / 2;
-    const yc = (points[l].y + points[l - 1].y) / 2;
-    context.lineWidth = points[l - 1].lineWidth;
-    context.quadraticCurveTo(points[l - 1].x, points[l - 1].y, xc, yc);
+    const c = GetPointBetween(points[l], points[l - 1]);
+    //const xc = (points[l].x + points[l - 1].x) / 2;
+    //const yc = (points[l].y + points[l - 1].y) / 2;
+    context.quadraticCurveTo(points[l - 1].x, points[l - 1].y, c.x, c.y);
     context.stroke();
     //context.beginPath();
     //context.moveTo(xc, yc);
@@ -153,29 +128,28 @@ function OnSignalTouchEnd(id, x, y) {
   }
   const client = clients[id];
   const points = client.points;
-  //isMousedown = false;
 
 
   if (points.length >= 3) {
     const l = points.length - 1;
     const lastPoint = points[l];
-    const xc = (points[l - 1].x + points[l - 2].x) / 2;
-    const yc = (points[l - 1].y + points[l - 2].y) / 2;
+    const c = GetPointBetween(lastPoint, points[l - 1]);
+    //const xc = (points[l].x + points[l - 1].x) / 2;
+    //const yc = (points[l].y + points[l - 1].y) / 2;
 
     context.beginPath();
-    context.moveTo(xc, yc);
+    context.moveTo(c.x, c.y);
 
     context.strokeStyle = client.strokeStyle;
+    context.lineWidth = points[l - 1].lineWidth;
     context.lineCap = "round";
     context.lineJoin = "round";
 
-    context.lineWidth = points[l - 1].lineWidth;
     context.quadraticCurveTo(lastPoint.x, lastPoint.y, x, y);
     context.stroke();
   }
 
   client.points = [];
-  //points = [];
   lineWidth = 0;
 }
 connection.on("SignalTouchEnd", OnSignalTouchEnd);
