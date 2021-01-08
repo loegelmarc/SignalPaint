@@ -92,8 +92,8 @@ function OnSignalTouchStart(id, x, y, lineWidth, color) {
   context.strokeStyle = clients[id].strokeStyle;
   context.lineCap = "round";
   context.lineJoin = "round";
-  context.beginPath();
-  context.moveTo(x, y);
+  //context.beginPath();
+  //context.moveTo(x, y);
 
   const point = { x, y, lineWidth };
   clients[id].points.push(point);
@@ -120,13 +120,27 @@ function OnSignalTouchMove(id, x, y, lineWidth) {
 
   if (points.length >= 3) {
     const l = points.length - 1;
+    context.beginPath();
+    context.strokeStyle = client.strokeStyle;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    //let xStart = 0;
+    //let yStart = 0;
+    if (points.length === 3) {
+      context.moveTo(x, y);
+    } else {
+      const xcStart = (points[l - 1].x + points[l - 2].x) / 2;
+      const ycStart = (points[l - 1].y + points[l - 2].y) / 2;
+      context.moveTo(xcStart, ycStart);
+    }
+    //const l = points.length - 1;
     const xc = (points[l].x + points[l - 1].x) / 2;
     const yc = (points[l].y + points[l - 1].y) / 2;
     context.lineWidth = points[l - 1].lineWidth;
     context.quadraticCurveTo(points[l - 1].x, points[l - 1].y, xc, yc);
     context.stroke();
-    context.beginPath();
-    context.moveTo(xc, yc);
+    //context.beginPath();
+    //context.moveTo(xc, yc);
   }
 }
 connection.on("SignalTouchMove", OnSignalTouchMove);
@@ -139,13 +153,21 @@ function OnSignalTouchEnd(id, x, y) {
   const points = client.points;
   //isMousedown = false;
 
-  context.strokeStyle = client.strokeStyle;
-  context.lineCap = "round";
-  context.lineJoin = "round";
 
   if (points.length >= 3) {
     const l = points.length - 1;
     const lastPoint = points[l];
+    const xc = (points[l - 1].x + points[l - 2].x) / 2;
+    const yc = (points[l - 1].y + points[l - 2].y) / 2;
+
+    context.beginPath();
+    context.moveTo(xc, yc);
+
+    context.strokeStyle = client.strokeStyle;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+
+    context.lineWidth = points[l - 1].lineWidth;
     context.quadraticCurveTo(lastPoint.x, lastPoint.y, x, y);
     context.stroke();
   }
