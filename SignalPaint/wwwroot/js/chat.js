@@ -88,10 +88,10 @@ function OnSignalTouchStart(id, x, y, lineWidth, color) {
   }
   clients[id].strokeStyle = color;
   //lineWidth = Math.log(pressure + 1) * 40;
-  context.lineWidth = lineWidth; // pressure * 50;
-  context.strokeStyle = clients[id].strokeStyle;
-  context.lineCap = "round";
-  context.lineJoin = "round";
+  //context.lineWidth = lineWidth; // pressure * 50;
+  //context.strokeStyle = clients[id].strokeStyle;
+  //context.lineCap = "round";
+  //context.lineJoin = "round";
   //context.beginPath();
   //context.moveTo(x, y);
 
@@ -111,9 +111,9 @@ function OnSignalTouchMove(id, x, y, lineWidth) {
   points.push(point);
   //points.push(point);
 
-  context.strokeStyle = client.strokeStyle;
-  context.lineCap = "round";
-  context.lineJoin = "round";
+  //context.strokeStyle = client.strokeStyle;
+  //context.lineCap = "round";
+  //context.lineJoin = "round";
   // context.lineWidth   = lineWidth// pressure * 50;
   // context.lineTo(x, y);
   // context.moveTo(x, y);
@@ -127,7 +127,9 @@ function OnSignalTouchMove(id, x, y, lineWidth) {
     //let xStart = 0;
     //let yStart = 0;
     if (points.length === 3) {
-      context.moveTo(x, y);
+      const p0 = points[0];
+      //context.moveTo(x, y);
+      context.moveTo(p0.x, p0.y);
     } else {
       const xcStart = (points[l - 1].x + points[l - 2].x) / 2;
       const ycStart = (points[l - 1].y + points[l - 2].y) / 2;
