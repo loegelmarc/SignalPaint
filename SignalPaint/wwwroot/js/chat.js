@@ -94,30 +94,22 @@ function OnSignalTouchMove(id, x, y, lineWidth) {
     const l = points.length - 1;
     context.beginPath();
 
-    context.strokeStyle = client.strokeStyle;
-    context.lineWidth = points[l - 1].lineWidth;
-    context.lineCap = "round";
-    context.lineJoin = "round";
-
     if (points.length === 3) {
       const p0 = points[0];
       context.moveTo(p0.x, p0.y);
     } else {
       const cStart = GetPointBetween(points[l - 1], points[l - 2]);
-      //const xcStart = (points[l - 1].x + points[l - 2].x) / 2;
-      //const ycStart = (points[l - 1].y + points[l - 2].y) / 2;
-      //context.moveTo(xcStart, ycStart);
       context.moveTo(cStart.x, cStart.y);
     }
 
-    //const l = points.length - 1;
+    context.strokeStyle = client.strokeStyle;
+    context.lineWidth = points[l - 1].lineWidth;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+
     const c = GetPointBetween(points[l], points[l - 1]);
-    //const xc = (points[l].x + points[l - 1].x) / 2;
-    //const yc = (points[l].y + points[l - 1].y) / 2;
     context.quadraticCurveTo(points[l - 1].x, points[l - 1].y, c.x, c.y);
     context.stroke();
-    //context.beginPath();
-    //context.moveTo(xc, yc);
   }
 }
 connection.on("SignalTouchMove", OnSignalTouchMove);
@@ -134,8 +126,6 @@ function OnSignalTouchEnd(id, x, y) {
     const l = points.length - 1;
     const lastPoint = points[l];
     const c = GetPointBetween(lastPoint, points[l - 1]);
-    //const xc = (points[l].x + points[l - 1].x) / 2;
-    //const yc = (points[l].y + points[l - 1].y) / 2;
 
     context.beginPath();
     context.moveTo(c.x, c.y);
