@@ -18,12 +18,11 @@ const $colors = document.querySelectorAll(".selectColor");
 console.log($colors);
 
 //Define variables
+let roomId;
 let lineWidth = 0;
 let isMousedown = false;
 let clients = {};
 console.log(clients);
-//let points = [];
-//let strokeStyle = "black";
 let localStrokeStyle = "black";
 
 //Setup
@@ -47,6 +46,26 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").withAuto
 //}
 //connection.on("ReceiveMessage", OnReceiveMessage);
 
+function ConnectToRoom() {
+  //const url = new URL(window.location.href);
+  const queryString = window.location.search;
+  //const queryString = url.search;
+  //console.log(queryString);
+  const urlParams = new URLSearchParams(queryString);
+  const room = urlParams.get("room");
+  console.log(room);
+  if (room) {
+    connection.invoke("SignalJoinRoom", room).catch(function (err) {
+      return console.error(err.toString());
+    });
+  } else {
+    connection.invoke("SignalCreateNewRoom").catch(function (err) {
+      return console.error(err.toString());
+    });
+  }
+
+}
+
 function CreateClient() {
   return { 'points': [], 'strokeStyle': "" };
 }
@@ -56,6 +75,18 @@ function GetPointBetween(p1, p2) {
   const y = (p1.y + p2.y) / 2;
   return { x, y };
 }
+
+function OnSignalJoinedRoom(id) {
+  roomId = id;
+  const url = new URL(window.location.href);
+  const urlParams = new URLSearchParams(url.search);
+  urlParams.set("room", roomId);
+  url.search = urlParams.toString();
+  window.history.pushState("Data", "", url);
+  //document.location.hash = "?room=" & id;
+}
+connection.on("SignalJoinedRoom", OnSignalJoinedRoom);
+
 
 function OnSignalDisconnected(id) {
   console.log(id & " disconnected");
@@ -147,6 +178,7 @@ connection.on("SignalTouchEnd", OnSignalTouchEnd);
 
 connection.start().then(function () {
   //$send.disabled = false;
+  ConnectToRoom();
 }).catch(function (err) {
   return console.error(err.toString());
 });
@@ -342,6 +374,8 @@ color_picker_wrapper.style.backgroundColor = color_picker.value;
 //  }
 //}
 
+//ConnectToRoom();
+
 //Add event listeners
 for (const ev of ["touchstart", "mousedown"]) {
   canvas.addEventListener(ev, OnTouchStart);
@@ -351,6 +385,6 @@ for (const ev of ["touchmove", "mousemove"]) {
   canvas.addEventListener(ev, OnTouchMove);
 }
 
-for (const ev of ["touchend", "touchleave", "mouseup"]) {
+for (const ev of ["touchend", "touchleave", "touchcancel", "mouseup"]) {
   canvas.addEventListener(ev, OnTouchEnd);
 };

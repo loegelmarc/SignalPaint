@@ -50,5 +50,19 @@ namespace SignalPaint.Hubs
     /// </summary>
     /// <param name="connectionId">ID of the connection</param>
     Task SignalDisconnected(string connectionId);
+
+
+    ///// <summary>
+    ///// Creates a new room
+    ///// </summary>
+    ///// <returns>Returns the ID of the newly created room to the caller</returns>
+    //Task SignalCreateNewRoom();
+
+    /// <summary>
+    /// Moves the current connection to the specified room
+    /// </summary>
+    /// <param name="roomId">ID of the room</param>
+    Task SignalJoinedRoom(string roomId);
+
   }
 }
