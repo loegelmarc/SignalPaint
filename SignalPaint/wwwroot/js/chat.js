@@ -10,6 +10,9 @@ const color_picker = document.getElementById("color-picker");
 const color_picker_wrapper = document.getElementById("color-picker-wrapper");
 const $clear = document.getElementById("clearScreen");
 
+const invite = document.querySelector("#inviteButton");
+const save = document.querySelector("#saveButton");
+
 //const $send = document.querySelectorAll("#sendButton")[0];
 //const $user = document.querySelectorAll("#userInput")[0];
 //const $message = document.querySelectorAll("#messageInput")[0];
@@ -53,12 +56,14 @@ function ConnectToRoom() {
   //console.log(queryString);
   const urlParams = new URLSearchParams(queryString);
   const room = urlParams.get("room");
-  console.log(room);
+  console.log(`Room from url: ${room}`);
   if (room) {
+    console.log("Join room.");
     connection.invoke("SignalJoinRoom", room).catch(function (err) {
       return console.error(err.toString());
     });
   } else {
+    console.log("Create new room.");
     connection.invoke("SignalCreateNewRoom").catch(function (err) {
       return console.error(err.toString());
     });
@@ -83,6 +88,8 @@ function OnSignalJoinedRoom(id) {
   urlParams.set("room", roomId);
   url.search = urlParams.toString();
   window.history.pushState("Data", "", url);
+  console.log(`Joined room: ${roomId}`);
+  console.log(`URL is now: ${url}`);
   //document.location.hash = "?room=" & id;
 }
 connection.on("SignalJoinedRoom", OnSignalJoinedRoom);
@@ -183,6 +190,12 @@ connection.start().then(function () {
   return console.error(err.toString());
 });
 
+
+connection.onreconnected(function () {
+  console.log("Reconnected");
+  ConnectToRoom();
+});
+
 //$send.addEventListener("click", function (event) {
 //  var user = $user.value;
 //  var message = $message.value;
@@ -201,7 +214,7 @@ $clear.addEventListener("click", function (event) {
 
 
 function OnTouchStart(e) {
-  console.log(e);
+  //console.log(e);
   e.preventDefault();
   let pressure = 0.1;
   let x, y;
@@ -388,3 +401,57 @@ for (const ev of ["touchmove", "mousemove"]) {
 for (const ev of ["touchend", "touchleave", "touchcancel", "mouseup"]) {
   canvas.addEventListener(ev, OnTouchEnd);
 };
+
+
+function CreateImageFromCanvas() {
+  let image = new Image();
+  image.src = canvas.toDataURL("image/png");
+  return image;
+}
+
+if (navigator.share) {
+  invite.addEventListener("click",
+    () => {
+      const shareData = {
+        title: "SignalPaint",
+        text: "Join my room to paint with me.",
+        url: window.location
+      };
+
+      navigator.share(shareData)
+        .then(() => console.log("Shared successfully"))
+        .catch((error) => console.log("Error sharing", error));
+    });
+} else {
+  invite.classList.add("hidden");
+  //save.classList.add("hidden");
+}
+
+save.addEventListener("click",
+  () => {
+    var image = CreateImageFromCanvas();
+    var anchor = document.createElement("a");
+
+    console.log(anchor);
+    anchor.setAttribute("href", image.src);
+    anchor.setAttribute("download", "image.png");
+    anchor.click();
+    //const image = canvas.toDataURL;
+    ////https://w3c.github.io/web-share/demos/share-files.html
+    ////https://stackoverflow.com/questions/61250048/how-to-share-a-single-base64-url-image-via-the-web-share-api
+    //const blob = fetch(image).blob();
+    //const file = new File([blob], "SignalPaint.png", { type: blob.type });
+    //const files = [file];
+    //if (navigator.canShare && navigator.canShare({ files: files })) {
+    //  const shareData = {
+    //    files: files,
+    //    title: "SignalPaint",
+    //    text: "Join my room to paint with me."
+    //  };
+    //  navigator.share(shareData)
+    //    .then(() => console.log("Shared successfully"))
+    //    .catch((error) => console.log("Error sharing", error));
+    //} else {
+    //  console.log(`Your system doesn't support sharing files.`);
+    //}
+  });
