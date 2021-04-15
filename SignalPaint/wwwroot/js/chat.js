@@ -25,7 +25,7 @@ var localStrokeStyle = "black";
 //Setup
 canvas.width = window.innerWidth * 2;
 canvas.height = window.innerHeight * 2;
-var requestIdleCallback2 = window.requestIdleCallback || (function (fn) { setTimeout(fn, 1); });
+var idleCallback = window.requestIdleCallback || (function (fn) { setTimeout(fn, 1); });
 //Connect to hub
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").withAutomaticReconnect().build();
 //Disable send button until connection is established
@@ -234,7 +234,7 @@ function onTouchMove(e) {
     //  context.beginPath();
     //  context.moveTo(xc, yc);
     //}
-    requestIdleCallback2(function () {
+    idleCallback(function () {
         $force.textContent = "force = " + pressure;
         var touch = e.touches ? e.touches[0] : null;
         if (touch) {
@@ -340,7 +340,6 @@ if (navigator.share) {
 }
 else {
     invite.classList.add("hidden");
-    //save.classList.add("hidden");
 }
 save.addEventListener("click", function () {
     var image = createImageFromCanvas();

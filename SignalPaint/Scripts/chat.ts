@@ -50,7 +50,7 @@ let localStrokeStyle = "black";
 canvas.width = window.innerWidth * 2;
 canvas.height = window.innerHeight * 2;
 
-const requestIdleCallback2 = (window as Window).requestIdleCallback || (fn => { setTimeout(fn, 1) });
+const idleCallback = window.requestIdleCallback || (fn => { setTimeout(fn, 1) });
 
 //Connect to hub
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").withAutomaticReconnect().build();
@@ -110,13 +110,13 @@ connection.on("SignalJoinedRoom", onSignalJoinedRoom);
 
 
 function onSignalDisconnected(id: string) {
-  console.log(id + " disconnected");
+  console.log(`${id} disconnected`);
   clients[id] = null;
 }
 connection.on("SignalDisconnected", onSignalDisconnected);
 
 function onSignalClearScreen(id: string) {
-  console.log(id + " clears the screen");
+  console.log(`${id} clears the screen`);
   context.clearRect(0, 0, canvas.width, canvas.height);
 }
 connection.on("SignalClearScreen", onSignalClearScreen);
@@ -298,7 +298,7 @@ function onTouchMove(e) {
   //  context.moveTo(xc, yc);
   //}
 
-  requestIdleCallback2(() => {
+  idleCallback(() => {
     $force.textContent = `force = ${pressure}`;
 
     const touch = e.touches ? e.touches[0] : null;
@@ -429,7 +429,6 @@ if (navigator.share) {
     });
 } else {
   invite.classList.add("hidden");
-  //save.classList.add("hidden");
 }
 
 save.addEventListener("click",

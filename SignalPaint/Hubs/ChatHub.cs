@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 // ReSharper disable UnusedMember.Global
@@ -11,14 +12,14 @@ namespace SignalPaint.Hubs
   /// </summary>
   public class ChatHub : Hub<IChatClient>
   {
-    static readonly ConcurrentDictionary<string, string> ConnectionsInRooms = new ConcurrentDictionary<string, string>();
+    private static readonly ConcurrentDictionary<string, string> ConnectionsInRooms = new ConcurrentDictionary<string, string>();
 
-    private string CreateRoomId()
+    private static string CreateRoomId()
     {
       string roomId;
       do
       {
-        roomId = Guid.NewGuid().ToString();
+        roomId = Guid.NewGuid().ToString().Split('-', StringSplitOptions.RemoveEmptyEntries).First();
       } while (ConnectionsInRooms.Values.Contains(roomId));
       return roomId;
     }
